@@ -1,6 +1,8 @@
 package com.easyfin.travis.easyfin;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -21,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,10 +38,10 @@ public class StocksActivity extends Fragment {
         return fragment;
     }
 
-        @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            AsyncTask<String,Void,String> stocks = new stockURL().execute("https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=BTC,USD");
+            AsyncTask<String,Void,List<String>> stocks = new stockURL().execute("https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=USD,BTC");
     }
 
     @Override
@@ -44,6 +49,23 @@ public class StocksActivity extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.activity_stocks, container, false);
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        Button searchBttn = (Button) getView().findViewById(R.id.stock_search_button);
+        searchBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText text = (EditText) getView().findViewById(R.id.stock_search_EditText);
+                if(!(text.getText().toString() == String.valueOf("")))
+                {
+                    String address = "https://min-api.cryptocompare.com/data/price?fsym="+String.valueOf(text.getText().toString().toUpperCase())+"&tsyms=USD,BTC";
+                    AsyncTask<String,Void,List<String>> stocksEdited = new stockURL().execute(address);
+                }
+            }
+        });
     }
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
@@ -70,30 +92,52 @@ public class StocksActivity extends Fragment {
     {
         startActivity(new Intent(getActivity(),add_stock_favorite.class));
     }
-    private class stockURL extends AsyncTask<String,Void,String>
+    private class stockURL extends AsyncTask<String,Void,List<String>>
     {
         @Override
-        protected String doInBackground(String... strings) {
-            String txt = "";
-            for(int j = 0; j < strings.length; j++) {
-                txt += processText(strings[j]);
-            }
-            if (!txt.equals(""))
+        protected List<String> doInBackground(String... strings) {
+            List<String> txts = new LinkedList<>();
+            for(int i = 0; i < strings.length; i++)
             {
-                return txt;
+                String name = strings[i].substring(50,53).toString();
+                txts.add(name);
+                List<String> tmp = processText(strings[i]);
+                for(int j = 0; j < tmp.size(); j++)
+                {
+                    txts.add(tmp.get(j));
+                }
+            }
+            if (!txts.isEmpty())
+            {
+                return txts;
             }
             else
             {
-                return "NO DATA";
+                return new LinkedList<String>();
             }
 
         }
 
         @Override
-        protected void onPostExecute(String txt)
+        protected void onPostExecute(List<String> txts)
         {
-            TextView view = (TextView) getView().findViewById(R.id.testStock);
-            view.setText(txt);
+            Iterator<String> itr = txts.listIterator();
+            int count = 1;
+            Resources r = getView().getResources();
+            String id_name;
+            while(itr.hasNext() && count <=5)
+            {
+                id_name = "tablename"+String.valueOf(count);
+                TextView view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
+                view.setText(itr.next());
+                id_name ="tableusd"+String.valueOf(count);
+                view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
+                view.setText(itr.next());
+                id_name ="tablebtc"+String.valueOf(count);
+                view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
+                view.setText(itr.next());
+                count++;
+            }
         }
 
     }
@@ -101,11 +145,44 @@ public class StocksActivity extends Fragment {
     private List<String> processData(BufferedReader reader) throws IOException
     {
         List<String> lst = new LinkedList<>();
-        lst.add(reader.readLine());
+        String item = "";
+        try{
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(reader.readLine());
+            //takes the buffer and starts reading it character by character and divides it up into chunks
+            for(int i = 0; i<buffer.length();i++)
+            {
+                switch(buffer.charAt(i))
+                {
+                    case '{':
+                        break;
+                    case '"':
+                        break;
+                    case ',':
+                        lst.add(item);
+                        item = "";
+                        break;
+                    case '}':
+                        lst.add(item);
+                        item="";
+                        break;
+                    case ':':
+                        break;
+                    default:
+                        if(Character.isDigit(buffer.charAt(i)) || buffer.charAt(i) == '.')
+                        {
+                            item+=buffer.charAt(i);
+                        }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+
+        }
         return lst;
     }
-    private String processText(String urlhttp) {
-        String txt = "";
+    private List<String> processText(String urlhttp) {
         try {
             URL url = new URL(urlhttp);
             HttpURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -115,15 +192,12 @@ public class StocksActivity extends Fragment {
                 InputStream response = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"));
                 List<String> lst = processData(reader);
-
-                for (int i = 0; i < lst.size(); i++) {
-                    txt += lst.get(i);
-                }
+                return lst;
             }
         }
         catch (Exception e) {
-            return "";
+            return new LinkedList<String>();
         }
-        return txt.toString();
+        return new LinkedList<String>();
     }
 }

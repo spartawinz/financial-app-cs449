@@ -6,17 +6,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.easyfin.travis.easyfin.StocksActivity">
-
-
-        <TextView
-            android:id="@+id/testStock"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/cclogo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"/>
+            android:src="@mipmap/ic_cryptocomparelogo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <TableLayout
+            android:id = "@+id/stockTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*"
+            android:layout_centerVertical="true"
+            android:layout_below="@+id/cclogo"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+                <TableRow>
+                        <TextView
+                            android:padding="3dip"
+                            android:text ="Name"/>
+                        <TextView
+                            android:padding="3dip"
+                            android:text ="USD"/>
+                        <TextView
+                            android:padding="3dip"
+                            android:text ="BTC"/>
+                </TableRow>
+                <TableRow>
+                        <TextView
+                            android:id = "@+id/tablename1"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tableusd1"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tablebtc1"
+                            android:padding = "3dip"/>
+                </TableRow>
+                <TableRow>
+                        <TextView
+                            android:id = "@+id/tablename2"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tableusd2"
+                            android:padding = "3dip"
+                            />
+                        <TextView
+                            android:id="@+id/tablebtc2"
+                            android:padding = "3dip"/>
+                </TableRow>
+                <TableRow>
+                        <TextView
+                            android:id = "@+id/tablename3"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tableusd3"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tablebtc3"
+                            android:padding = "3dip"/>
+                </TableRow>
+                <TableRow>
+                        <TextView
+                            android:id = "@+id/tablename4"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tableusd4"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tablebtc4"
+                            android:padding = "3dip"/>
+                </TableRow>
+                <TableRow>
+                        <TextView
+                            android:id = "@+id/tablename5"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tableusd5"
+                            android:padding = "3dip"/>
+                        <TextView
+                            android:id="@+id/tablebtc5"
+                            android:padding = "3dip"/>
+                </TableRow>
+
+
+        </TableLayout>
+        <Button
+            android:id = "@+id/stock_search_button"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/stockTable"
+            android:layout_marginRight="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:text = "@string/search_button"/>
+        <EditText
+            android:id="@+id/stock_search_EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/stockTable"
+            android:layout_toLeftOf="@id/stock_search_button"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentLeft="true"
+            android:hint="@string/stock_search_editText"/>
+
+
 
 
 
