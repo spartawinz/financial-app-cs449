@@ -1,23 +1,21 @@
 package com.easyfin.travis.easyfin;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,14 +23,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
 
 public class StocksActivity extends Fragment {
+    public preferenceHandler handler = preferenceHandler.getInstance();
+    private String getAddress(String str)
+    {
+        String address = "https://min-api.cryptocompare.com/data/price?fsym="+String.valueOf(str.toUpperCase())+"&tsyms=USD,BTC";
+        return address;
+    }
     public static StocksActivity newInstance() {
         StocksActivity fragment = new StocksActivity();
         return fragment;
@@ -41,7 +47,7 @@ public class StocksActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            AsyncTask<String,Void,List<String>> stocks = new stockURL().execute("https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=USD,BTC");
+            AsyncTask<String,Void,List<String>> stocks = new stockURL().execute(getAddress("XMR"));
     }
 
     @Override
@@ -61,11 +67,37 @@ public class StocksActivity extends Fragment {
                 EditText text = (EditText) getView().findViewById(R.id.stock_search_EditText);
                 if(!(text.getText().toString() == String.valueOf("")))
                 {
-                    String address = "https://min-api.cryptocompare.com/data/price?fsym="+String.valueOf(text.getText().toString().toUpperCase())+"&tsyms=USD,BTC";
-                    AsyncTask<String,Void,List<String>> stocksEdited = new stockURL().execute(address);
+                    AsyncTask<String,Void,List<String>> stocksEdited = new stockURL().execute(getAddress(text.getText().toString()));
                 }
             }
         });
+        //sets up and adds a onselectedlistener to the spinner this will return the values of the favorite.
+        refreshSpinner();
+        Spinner stockSpinner = (Spinner) getView().findViewById(R.id.stock_spinner);
+        stockSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Set<String> ids = preferenceHandler.getInstance().getFavoritesId(getActivity().getApplicationContext());
+                int count = 0;
+                Iterator<String> itr = ids.iterator();
+                while(count != position && itr.hasNext())
+                {
+                    if(count == position)
+                    {
+                        AsyncTask<String,Void,List<String>> stockFavorite = new stockURL().execute(getAddress(itr.next()));
+                        return;
+                    }
+                    count++;
+                    itr.next();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
@@ -200,4 +232,19 @@ public class StocksActivity extends Fragment {
         }
         return new LinkedList<String>();
     }
+    public void refreshSpinner()
+    {
+        ArrayList<String> entries = new ArrayList<>();
+        Set<String> strs = preferenceHandler.getInstance().getFavoritesName(getActivity().getApplicationContext());
+        for(String str:strs)
+        {
+            entries.add(str);
+        }
+        Spinner stockSpinner = (Spinner) getView().findViewById(R.id.stock_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,entries);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.notifyDataSetChanged();
+        stockSpinner.setAdapter(adapter);
+    }
+
 }

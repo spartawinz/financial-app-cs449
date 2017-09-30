@@ -50,36 +50,5 @@ public class Base extends AppCompatActivity {
         transaction.commit();
     }
 
-    /*private void setupNavigationView()
-    {
-        BottomNavigationView bnv = (BottomNavigationView) findViewById(R.id.navigation_bottom);
-        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment frag = null;
-                switch(item.getItemId())
-                {
-                    case R.id.homeActivity:
-                        frag = HomeActivity.newInstance();
-                        break;
-                    case R.id.billsActivity:
-                        frag = BillsActivity.newInstance();
-                        break;
-                    case R.id.stocksActivity:
-                        frag =StocksActivity.newInstance();
-                        break;
-                    default:
-                        return false;
-                }
-                FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-                t.replace(R.id.main_container,frag);
-                t.commit();
-                return true;
-            }
-        });
-        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.main_container,HomeActivity.newInstance());
-        t.commit();
-    }*/
 
 }

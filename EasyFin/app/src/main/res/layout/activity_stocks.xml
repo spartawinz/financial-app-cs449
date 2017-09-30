@@ -113,9 +113,16 @@
             android:layout_alignParentLeft="true"
             android:hint="@string/stock_search_editText"/>
 
-
-
-
+        <Spinner
+            android:id="@+id/stock_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/stock_search_EditText"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="25dp" />
 
 
 </RelativeLayout>
