@@ -93,9 +93,18 @@ public class StocksActivity extends Fragment {
                 }
             }
         });
-        //sets up and adds a onselectedlistener to the spinner this will return the values of the favorite.
+        Button refreshButton = (Button) getView().findViewById(R.id.refresh_spinner_button);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshSpinner();
+            }
+        });
+
         refreshSpinner();
         Spinner stockSpinner = (Spinner) getView().findViewById(R.id.stock_spinner);
+
+        //sets up and adds a onselectedlistener to the spinner this will return the values of the favorite.
         stockSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -28,7 +28,6 @@ public class preferenceHandler {
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-//TODO convert string sets to Strings because the StringSets are hashes which dont preserve order.
         String temp = prefs.getString("favorite_id","");
         temp+=","+id;
         editor.putString("favorite_id",temp);

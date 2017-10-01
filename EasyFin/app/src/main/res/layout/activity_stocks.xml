@@ -124,6 +124,16 @@
             android:layout_marginLeft="25dp"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="25dp" />
+        <Button
+                android:id="@+id/refresh_spinner_button"
+                android:layout_width="175dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/stock_spinner"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="15dp"
+                android:text="@string/refreshBttn"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="105dp"/>
 
 
 </RelativeLayout>

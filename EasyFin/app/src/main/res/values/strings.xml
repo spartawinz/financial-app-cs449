@@ -16,4 +16,5 @@
     <string name="stock_search_editText">Coin ID (up to 5)</string>
     <string name="search_button">Search</string>
     <string name="spinner_button_text">Search</string>
+    <string name="refreshBttn">Refresh Favorites</string>
 </resources>
