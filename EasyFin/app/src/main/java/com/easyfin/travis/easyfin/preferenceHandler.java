@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Travis on 9/30/2017.
@@ -29,37 +28,61 @@ public class preferenceHandler {
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        Set<String> temp = prefs.getStringSet("favorite_id", new HashSet<String>());
-        temp.add(id);
-        editor.putStringSet("favorite_id",temp);
+//TODO convert string sets to Strings because the StringSets are hashes which dont preserve order.
+        String temp = prefs.getString("favorite_id","");
+        temp+=","+id;
+        editor.putString("favorite_id",temp);
         editor.commit();
-        temp = prefs.getStringSet("favorite_name",new HashSet<String>());
-        temp.add(name);
-        editor.putStringSet("favorite_name",temp);
+        temp = prefs.getString("favorite_name","");
+        temp+=","+name;
+        editor.putString("favorite_name",temp);
         editor.commit();
     }
-    public Set<String> getFavoritesId(Context context)
+    public List<String> getFavoritesId(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getStringSet("favorite_id",new HashSet<String>());
+        String[] favorites = prefs.getString("favorite_id","").split(",");
+        List<String> lstFavorites = new LinkedList<>();
+        for(String favorite:favorites)
+        {
+            lstFavorites.add(favorite);
+        }
+        return lstFavorites;
     }
-    public Set<String> getFavoritesName(Context context)
+    public List<String> getFavoritesName(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getStringSet("favorite_name",new HashSet<String>());
+        String[] favorites = prefs.getString("favorite_name","").split(",");
+        List<String> lstFavorites = new LinkedList<>();
+        for(String favorite:favorites)
+        {
+            lstFavorites.add(favorite);
+        }
+        return lstFavorites;
     }
     public void addCoinIds(Context context, List<String> names)
     {
-        Set<String> lstNames = new HashSet<>();
-
+        String strNames = "";
+        for (int i = 0; i < names.size();i++)
+        {
+            strNames+=names.get(i);
+            if(i != names.size()-1)
+                strNames+=",";
+        }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putStringSet("coinIDs",lstNames);
+        editor.putString("coinIDs",strNames);
         editor.commit();
     }
-    public Set<String> getCoinIds(Context context)
+    public List<String> getCoinIds(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getStringSet("coinIDs",new HashSet<String>());
+        String[] temp = prefs.getString("coinIDs","").split(",");
+        List<String> lstCoins = new LinkedList<>();
+        for (String item:temp)
+        {
+            lstCoins.add(item);
+        }
+        return lstCoins;
     }
 }

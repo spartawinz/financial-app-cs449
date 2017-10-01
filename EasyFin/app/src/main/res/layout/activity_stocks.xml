@@ -111,7 +111,8 @@
             android:layout_marginLeft="25dp"
             android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
-            android:hint="@string/stock_search_editText"/>
+            android:hint="@string/stock_search_editText"
+            android:textSize="15dp"/>
 
         <Spinner
             android:id="@+id/stock_spinner"

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -52,8 +51,9 @@ public class StocksActivity extends Fragment {
         temp.add("XMR");
         temp.add("ZEC");
         temp.add("ETH");
-        temp.add("NEO");
+        temp.add("DASH");
         temp.add("LTC");
+        preferenceHandler.getInstance().addCoinIds(getActivity().getApplicationContext(),temp);
         return temp;
     }
     // instantiates the fragment
@@ -84,9 +84,11 @@ public class StocksActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 EditText text = (EditText) getView().findViewById(R.id.stock_search_EditText);
+                clearTables();
                 if(!(text.getText().toString() == String.valueOf("")))
                 {
                     List<String> names = processText(new StringBuffer(text.getText().toString()));
+                    preferenceHandler.getInstance().addCoinIds(getActivity().getApplicationContext(),names);
                     AsyncTask<List<String>,Void,List<String>> stocksEdited = new stockURL().execute(getAddresses(names));
                 }
             }
@@ -97,21 +99,28 @@ public class StocksActivity extends Fragment {
         stockSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Set<String> ids = preferenceHandler.getInstance().getFavoritesId(getActivity().getApplicationContext());
+                clearTables();
+                List<String> ids = preferenceHandler.getInstance().getFavoritesId(getActivity().getApplicationContext());
                 int count = 0;
-                Iterator<String> itr = ids.iterator();
+                Iterator<String> idItr = ids.iterator();
+                List<String> name = new LinkedList<String>();
+                List<String> nameSet = preferenceHandler.getInstance().getFavoritesName(getActivity().getApplicationContext());
+                Iterator<String> nameItr = nameSet.iterator();
                 // finds the position of the favoritesid and returns the values for it
-                while(count != position && itr.hasNext())
+                while(count != position && idItr.hasNext())
                 {
                     if(count == position)
                     {
                         List<String> temp = new LinkedList<>();
-                        temp.add(itr.next());
+                        temp.add(idItr.next());
+                        name.add(nameItr.next());
+                        preferenceHandler.getInstance().addCoinIds(getActivity().getApplicationContext(),name);
                         AsyncTask<List<String>,Void,List<String>> stockFavorite = new stockURL().execute(temp);
                         return;
                     }
                     count++;
-                    itr.next();
+                    idItr.next();
+                    nameItr.next();
                 }
             }
 
@@ -155,8 +164,6 @@ public class StocksActivity extends Fragment {
             List<String> strings = lst[0];
             for(int i = 0; i < strings.size(); i++)
             {
-                String name = strings.get(i).substring(50,53).toString();
-                txts.add(name);
                 List<String> tmp = processURL(strings.get(i));
                 for(int j = 0; j < tmp.size(); j++)
                 {
@@ -181,11 +188,13 @@ public class StocksActivity extends Fragment {
             int count = 1;
             Resources r = getView().getResources();
             String id_name;
+            List<String> nameSet = preferenceHandler.getInstance().getCoinIds(getActivity().getApplicationContext());
+            Iterator<String> names = nameSet.iterator();
             while(itr.hasNext() && count <=5)
             {
                 id_name = "tablename"+String.valueOf(count);
                 TextView view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
-                view.setText(itr.next());
+                view.setText(names.next());
                 id_name ="tableusd"+String.valueOf(count);
                 view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
                 view.setText(itr.next());
@@ -282,13 +291,17 @@ public class StocksActivity extends Fragment {
         {
 
         }
+        if(item != "")
+        {
+            lst.add(item);
+        }
         return lst;
     }
     // refreshes the spinners data
     public void refreshSpinner()
     {
         ArrayList<String> entries = new ArrayList<>();
-        Set<String> strs = preferenceHandler.getInstance().getFavoritesName(getActivity().getApplicationContext());
+        List<String> strs = preferenceHandler.getInstance().getFavoritesName(getActivity().getApplicationContext());
         for(String str:strs)
         {
             entries.add(str);
@@ -298,6 +311,30 @@ public class StocksActivity extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter.notifyDataSetChanged();
         stockSpinner.setAdapter(adapter);
+    }
+    //clears tables of values
+    private void clearTables()
+    {
+        int count = 1;
+        Resources r = getView().getResources();
+        String id_name;
+        String empty = "";
+        while( count <=5)
+        {
+            id_name = "tablename"+String.valueOf(count);
+            TextView view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
+            if(view != null)
+                view.setText(empty);
+            id_name ="tableusd"+String.valueOf(count);
+            view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
+            if(view != null)
+                view.setText(empty);
+            id_name ="tablebtc"+String.valueOf(count);
+            view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
+            if (view != null)
+                view.setText(empty);
+            count++;
+        }
     }
 
 }

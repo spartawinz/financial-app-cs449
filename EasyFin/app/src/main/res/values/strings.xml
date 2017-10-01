@@ -13,7 +13,7 @@
     <string name="title_activity_base">Base</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="stock_search_editText">Coin ID</string>
+    <string name="stock_search_editText">Coin ID (up to 5)</string>
     <string name="search_button">Search</string>
     <string name="spinner_button_text">Search</string>
 </resources>
