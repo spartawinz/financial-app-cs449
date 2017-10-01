@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,5 +47,19 @@ public class preferenceHandler {
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getStringSet("favorite_name",new HashSet<String>());
+    }
+    public void addCoinIds(Context context, List<String> names)
+    {
+        Set<String> lstNames = new HashSet<>();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putStringSet("coinIDs",lstNames);
+        editor.commit();
+    }
+    public Set<String> getCoinIds(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getStringSet("coinIDs",new HashSet<String>());
     }
 }

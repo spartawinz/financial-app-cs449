@@ -33,12 +33,30 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class StocksActivity extends Fragment {
+    // just instantiates the instance of preferenceHandler if it hasn't already been made.
     public preferenceHandler handler = preferenceHandler.getInstance();
-    private String getAddress(String str)
+    // converts the names of the inputted to link addresses that are readable by the URLconnection.
+    private List<String> getAddresses(List<String> strs)
     {
-        String address = "https://min-api.cryptocompare.com/data/price?fsym="+String.valueOf(str.toUpperCase())+"&tsyms=USD,BTC";
-        return address;
+        List<String> addresses = new LinkedList<>();
+        for(String str:strs)
+        {
+            addresses.add("https://min-api.cryptocompare.com/data/price?fsym="+String.valueOf(str.toUpperCase())+"&tsyms=USD,BTC");
+        }
+        return addresses;
     }
+    //initial coins when you first start the app.
+    private List<String> initCoins()
+    {
+        List<String> temp = new LinkedList<>();
+        temp.add("XMR");
+        temp.add("ZEC");
+        temp.add("ETH");
+        temp.add("NEO");
+        temp.add("LTC");
+        return temp;
+    }
+    // instantiates the fragment
     public static StocksActivity newInstance() {
         StocksActivity fragment = new StocksActivity();
         return fragment;
@@ -46,8 +64,8 @@ public class StocksActivity extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            AsyncTask<String,Void,List<String>> stocks = new stockURL().execute(getAddress("XMR"));
+        super.onCreate(savedInstanceState);
+        AsyncTask<List<String>,Void,List<String>> stocks = new stockURL().execute(getAddresses(initCoins()));
     }
 
     @Override
@@ -60,6 +78,7 @@ public class StocksActivity extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        // listener for the search button
         Button searchBttn = (Button) getView().findViewById(R.id.stock_search_button);
         searchBttn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +86,8 @@ public class StocksActivity extends Fragment {
                 EditText text = (EditText) getView().findViewById(R.id.stock_search_EditText);
                 if(!(text.getText().toString() == String.valueOf("")))
                 {
-                    AsyncTask<String,Void,List<String>> stocksEdited = new stockURL().execute(getAddress(text.getText().toString()));
+                    List<String> names = processText(new StringBuffer(text.getText().toString()));
+                    AsyncTask<List<String>,Void,List<String>> stocksEdited = new stockURL().execute(getAddresses(names));
                 }
             }
         });
@@ -80,11 +100,14 @@ public class StocksActivity extends Fragment {
                 Set<String> ids = preferenceHandler.getInstance().getFavoritesId(getActivity().getApplicationContext());
                 int count = 0;
                 Iterator<String> itr = ids.iterator();
+                // finds the position of the favoritesid and returns the values for it
                 while(count != position && itr.hasNext())
                 {
                     if(count == position)
                     {
-                        AsyncTask<String,Void,List<String>> stockFavorite = new stockURL().execute(getAddress(itr.next()));
+                        List<String> temp = new LinkedList<>();
+                        temp.add(itr.next());
+                        AsyncTask<List<String>,Void,List<String>> stockFavorite = new stockURL().execute(temp);
                         return;
                     }
                     count++;
@@ -118,22 +141,23 @@ public class StocksActivity extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
+    // popups the add_stock_favorite activity
     protected void showPopup()
     {
         startActivity(new Intent(getActivity(),add_stock_favorite.class));
     }
-    private class stockURL extends AsyncTask<String,Void,List<String>>
+    // allows for the connection to the database and returns values
+    private class stockURL extends AsyncTask<List<String>,Void,List<String>>
     {
         @Override
-        protected List<String> doInBackground(String... strings) {
+        protected List<String> doInBackground(List<String>...lst) {
             List<String> txts = new LinkedList<>();
-            for(int i = 0; i < strings.length; i++)
+            List<String> strings = lst[0];
+            for(int i = 0; i < strings.size(); i++)
             {
-                String name = strings[i].substring(50,53).toString();
+                String name = strings.get(i).substring(50,53).toString();
                 txts.add(name);
-                List<String> tmp = processText(strings[i]);
+                List<String> tmp = processURL(strings.get(i));
                 for(int j = 0; j < tmp.size(); j++)
                 {
                     txts.add(tmp.get(j));
@@ -173,7 +197,6 @@ public class StocksActivity extends Fragment {
         }
 
     }
-
     private List<String> processData(BufferedReader reader) throws IOException
     {
         List<String> lst = new LinkedList<>();
@@ -214,7 +237,8 @@ public class StocksActivity extends Fragment {
         }
         return lst;
     }
-    private List<String> processText(String urlhttp) {
+    // processes the URL and returns the data in a buffer
+    private List<String> processURL(String urlhttp) {
         try {
             URL url = new URL(urlhttp);
             HttpURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -232,6 +256,35 @@ public class StocksActivity extends Fragment {
         }
         return new LinkedList<String>();
     }
+    private List<String> processText(StringBuffer buffer)
+    {
+        List<String> lst = new LinkedList<>();
+        String item = "";
+        try{
+            //takes the buffer and starts reading it character by character and divides it up into chunks
+            for(int i = 0; i<buffer.length();i++)
+            {
+                switch(buffer.charAt(i))
+                {
+                    case ',':
+                        lst.add(item);
+                        item = "";
+                        break;
+                    default:
+                        if(Character.isLetter(buffer.charAt(i)))
+                        {
+                            item+=buffer.charAt(i);
+                        }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+
+        }
+        return lst;
+    }
+    // refreshes the spinners data
     public void refreshSpinner()
     {
         ArrayList<String> entries = new ArrayList<>();
