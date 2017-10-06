@@ -44,7 +44,8 @@ public class preferenceHandler {
         List<String> lstFavorites = new LinkedList<>();
         for(String favorite:favorites)
         {
-            lstFavorites.add(favorite);
+            if(favorite != "")
+                lstFavorites.add(favorite);
         }
         return lstFavorites;
     }
@@ -55,7 +56,8 @@ public class preferenceHandler {
         List<String> lstFavorites = new LinkedList<>();
         for(String favorite:favorites)
         {
-            lstFavorites.add(favorite);
+            if(favorite != "")
+                lstFavorites.add(favorite);
         }
         return lstFavorites;
     }
@@ -80,7 +82,8 @@ public class preferenceHandler {
         List<String> lstCoins = new LinkedList<>();
         for (String item:temp)
         {
-            lstCoins.add(item);
+            if(item != "")
+                lstCoins.add(item);
         }
         return lstCoins;
     }

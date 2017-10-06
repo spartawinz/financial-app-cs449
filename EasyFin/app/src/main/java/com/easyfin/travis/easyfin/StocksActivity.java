@@ -112,24 +112,25 @@ public class StocksActivity extends Fragment {
                 List<String> ids = preferenceHandler.getInstance().getFavoritesId(getActivity().getApplicationContext());
                 int count = 0;
                 Iterator<String> idItr = ids.iterator();
-                List<String> name = new LinkedList<String>();
-                List<String> nameSet = preferenceHandler.getInstance().getFavoritesName(getActivity().getApplicationContext());
-                Iterator<String> nameItr = nameSet.iterator();
                 // finds the position of the favoritesid and returns the values for it
-                while(count != position && idItr.hasNext())
+                while(count != ids.size() && idItr.hasNext())
                 {
                     if(count == position)
                     {
-                        List<String> temp = new LinkedList<>();
-                        temp.add(idItr.next());
-                        name.add(nameItr.next());
-                        preferenceHandler.getInstance().addCoinIds(getActivity().getApplicationContext(),name);
-                        AsyncTask<List<String>,Void,List<String>> stockFavorite = new stockURL().execute(temp);
+                        String[] temp = idItr.next().split(";");
+                        List<String> lstCoins = new LinkedList<String>();
+                        for (String coin:temp)
+                        {
+                            if(coin != "")
+                                lstCoins.add(coin);
+                        }
+                        if(!lstCoins.isEmpty())
+                            preferenceHandler.getInstance().addCoinIds(getActivity().getApplicationContext(), lstCoins);
+                        AsyncTask<List<String>,Void,List<String>> stockFavorite = new stockURL().execute(getAddresses(lstCoins));
                         return;
                     }
                     count++;
                     idItr.next();
-                    nameItr.next();
                 }
             }
 

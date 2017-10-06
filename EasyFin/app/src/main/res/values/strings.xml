@@ -7,13 +7,13 @@
     <string name="title_activity_stocks">Stocks</string>
     <string name="title_activity_bills">Bills</string>
     <string name="backBttn">Back</string>
-    <string name="title_stock_id">Stock ID</string>
+    <string name="title_stock_id">ID(s) use ";" (max 5)</string>
     <string name="title_stock_name">Stock Name</string>
     <string name="submitBttn">Submit</string>
     <string name="title_activity_base">Base</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="stock_search_editText">Coin ID (up to 5)</string>
+    <string name="stock_search_editText">ID(s) use "," (max 5)</string>
     <string name="search_button">Search</string>
     <string name="spinner_button_text">Search</string>
     <string name="refreshBttn">Refresh Favorites</string>
