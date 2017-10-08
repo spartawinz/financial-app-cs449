@@ -101,7 +101,8 @@
             android:layout_marginRight="25dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="15dp"
-            android:text = "@string/search_button"/>
+            android:text = "@string/search_button"
+            android:textColor="@color/colorWindowBackground"/>
         <EditText
             android:id="@+id/stock_search_EditText"
             android:layout_width="wrap_content"
@@ -112,7 +113,8 @@
             android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
             android:hint="@string/stock_search_editText"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:textColorHint="@color/white"/>
 
         <Spinner
             android:id="@+id/stock_spinner"
@@ -125,15 +127,16 @@
             android:layout_alignParentLeft="true"
             android:layout_marginRight="25dp" />
         <Button
-                android:id="@+id/refresh_spinner_button"
-                android:layout_width="175dp"
-                android:layout_height="40dp"
-                android:layout_below="@id/stock_spinner"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="15dp"
-                android:text="@string/refreshBttn"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="105dp"/>
+            android:id="@+id/refresh_spinner_button"
+            android:layout_width="175dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/stock_spinner"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:text="@string/refreshBttn"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="105dp"
+            android:textColor="@color/colorWindowBackground"/>
 
 
 </RelativeLayout>

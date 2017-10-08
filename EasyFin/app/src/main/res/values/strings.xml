@@ -17,4 +17,10 @@
     <string name="search_button">Search</string>
     <string name="spinner_button_text">Search</string>
     <string name="refreshBttn">Refresh Favorites</string>
+    <string name="bills_label_text">Bills</string>
+    <string name="refresh_bills_button">Refresh</string>
+    <string name="delete_bill_button">DELETE BILL</string>
+    <string name="bill_add_name_text">Bill Name</string>
+    <string name="bill_add_date_text">Bill Date (mm/dd/yyyy)</string>
+    <string name="bill_add_amount_text">amount (i.e. 7.56)</string>
 </resources>

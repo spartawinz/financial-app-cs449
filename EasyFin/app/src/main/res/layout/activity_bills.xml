@@ -6,20 +6,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.easyfin.travis.easyfin.BillsActivity">
-
-
-
     <TextView
-        android:id="@+id/BillsMessage"
+        android:id="@+id/bills_label"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/title_activity_bills" />
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:text="@string/bills_label_text"
+        android:textSize="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
+    <ScrollView
+        android:id="@+id/bills_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_below="@+id/bills_label"
+        android:layout_alignParentEnd="true">
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:text="test"/>
+            </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/bills_refresh_button"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bills_scroll_view"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="25dp"
+        android:text="@string/refresh_bills_button"
+        android:textSize="20dp"
+        android:textColor="@color/colorWindowBackground"/>
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bills_scroll_view"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:text="@string/delete_bill_button"
+        android:textSize="20dp"
+        android:textColor="@color/colorWindowBackground"/>
 
 </RelativeLayout>

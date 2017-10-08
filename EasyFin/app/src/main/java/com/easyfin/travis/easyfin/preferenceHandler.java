@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,5 +87,26 @@ public class preferenceHandler {
                 lstCoins.add(item);
         }
         return lstCoins;
+    }
+    //billsActivity functions
+    public void addBill(String name, Calendar date, int amount, Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("billName",name);
+        editor.commit();
+        editor.putString("billDate",date.toString());
+        editor.commit();
+        editor.putString("billAmount",String.valueOf(amount));
+        editor.commit();
+    }
+    public List<String> getBill(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        List<String> bill = new LinkedList<>();
+        bill.add(prefs.getString("billName",""));
+        bill.add(prefs.getString("billDate",""));
+        bill.add(prefs.getString("billAmount",""));
+        return bill;
     }
 }
