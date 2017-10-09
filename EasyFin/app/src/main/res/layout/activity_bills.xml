@@ -15,6 +15,31 @@
         android:textSize="40dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/bills_name_label"
+        android:layout_below="@id/bills_label"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bills_scroll_view"
+        android:text="@string/bills_name_label_text"
+        android:textSize="20dp"/>
+    <TextView
+        android:id="@+id/bills_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/bills_date_label_text"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/bills_amount_label"
+        android:layout_alignBottom="@+id/bills_amount_label"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/bills_amount_label"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/bills_scroll_view"
+        android:text="@string/bills_label_amount_text"
+        android:textSize="20dp"
+        android:layout_below="@+id/bills_label"/>
 
     <ScrollView
         android:id="@+id/bills_scroll_view"
@@ -22,17 +47,14 @@
         android:layout_height="250dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_below="@+id/bills_label"
+        android:layout_below="@+id/bills_name_label"
         android:layout_alignParentEnd="true">
 
         <LinearLayout
+            android:id="@+id/bills_linear"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="test"/>
             </LinearLayout>
     </ScrollView>
     <Button

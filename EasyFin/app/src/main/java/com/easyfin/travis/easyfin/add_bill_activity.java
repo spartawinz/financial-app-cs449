@@ -34,12 +34,7 @@ public class add_bill_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!billName.getText().toString().equals("")&&!billDate.getText().toString().equals("")&& !billAmount.getText().toString().equals("") && !billName.getText().toString().contains("`")&&!billDate.getText().toString().contains("`")) {
-                    Calendar date = new GregorianCalendar();
-                    String[] dateString = billDate.getText().toString().split("/");
-                    date.set(Calendar.MONTH, Integer.valueOf(dateString[0]));
-                    date.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateString[1]));
-                    date.set(Calendar.YEAR, Integer.valueOf(dateString[2]));
-                    addNewBill(billName.getText().toString(), date,Integer.valueOf(billAmount.getText().toString()));
+                    addNewBill(billName.getText().toString(), billDate.getText().toString(),Integer.valueOf(billAmount.getText().toString()));
                     finish();
                 }
                 else
@@ -58,13 +53,14 @@ public class add_bill_activity extends AppCompatActivity {
                     alertDialog.show();
                     billDate.setText("");
                     billName.setText("");
+                    billAmount.setText("");
                 }
             }
         });
     }
     // puts bill temporarily into the shared preference
-    private void addNewBill(String name, Calendar date,int amount)
+    private void addNewBill(String name, String date,int amount)
     {
-        preferenceHandler.getInstance().addBill(name,date,amount,getApplicationContext());
+        preferenceHandler.getInstance().addBillData(name,date,amount,getApplicationContext());
     }
 }

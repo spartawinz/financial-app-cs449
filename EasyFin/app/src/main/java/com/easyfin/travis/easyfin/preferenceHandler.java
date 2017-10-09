@@ -89,24 +89,30 @@ public class preferenceHandler {
         return lstCoins;
     }
     //billsActivity functions
-    public void addBill(String name, Calendar date, int amount, Context context)
+    public void addBillData(String name, String date, int amount, Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("billName",name);
-        editor.commit();
-        editor.putString("billDate",date.toString());
-        editor.commit();
-        editor.putString("billAmount",String.valueOf(amount));
+        String data = prefs.getString("billData","");
+        data+="`"+name+"`"+date+"`"+String.valueOf(amount);
+        editor.putString("billData",data);
         editor.commit();
     }
-    public List<String> getBill(Context context)
+    public List<String> getBillData(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        List<String> bill = new LinkedList<>();
-        bill.add(prefs.getString("billName",""));
-        bill.add(prefs.getString("billDate",""));
-        bill.add(prefs.getString("billAmount",""));
-        return bill;
+        List<String> billData = new LinkedList<>();
+        String[] data = prefs.getString("billData","").split("`");
+        for (String value:data)
+        {
+            billData.add(value);
+        }
+        return billData;
+    }
+    public int getBillNumber(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String[] billData = prefs.getString("billData","").split("`");
+        return billData.length/3;
     }
 }

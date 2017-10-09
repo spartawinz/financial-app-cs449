@@ -23,4 +23,7 @@
     <string name="bill_add_name_text">Bill Name</string>
     <string name="bill_add_date_text">Bill Date (mm/dd/yyyy)</string>
     <string name="bill_add_amount_text">amount (i.e. 7.56)</string>
+    <string name="bills_name_label_text">NAME</string>
+    <string name="bills_date_label_text">DATE</string>
+    <string name="bills_label_amount_text">AMOUNT</string>
 </resources>
