@@ -34,14 +34,32 @@ public class add_bill_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!billName.getText().toString().equals("")&&!billDate.getText().toString().equals("")&& !billAmount.getText().toString().equals("") && !billName.getText().toString().contains("`")&&!billDate.getText().toString().contains("`")) {
-                    addNewBill(billName.getText().toString(), billDate.getText().toString(),Integer.valueOf(billAmount.getText().toString()));
-                    finish();
+                    if(billName.getText().toString().length() > 20)
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(add_bill_activity.this,R.style.dialogTheme);
+                        builder.setTitle("ERROR")
+                                .setMessage("Please make the name 20 Characters max.")
+                                .setPositiveButton(android.R.string.ok,(new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }))
+                                .setCancelable(true);
+                        billName.setText("");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+                    else {
+                        addNewBill(billName.getText().toString(), billDate.getText().toString(), Double.parseDouble(billAmount.getText().toString()));
+                        finish();
+                    }
                 }
                 else
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(add_bill_activity.this,R.style.dialogTheme);
                     builder.setTitle("ERROR")
-                            .setMessage("Please fill out both entries and dont use ~")
+                            .setMessage("Please fill out all entries and dont use ~")
                             .setPositiveButton(android.R.string.ok,new DialogInterface.OnClickListener(){
                                 public void onClick(DialogInterface dialog, int which)
                                 {
@@ -59,7 +77,7 @@ public class add_bill_activity extends AppCompatActivity {
         });
     }
     // puts bill temporarily into the shared preference
-    private void addNewBill(String name, String date,int amount)
+    private void addNewBill(String name, String date,double amount)
     {
         preferenceHandler.getInstance().addBillData(name,date,amount,getApplicationContext());
     }

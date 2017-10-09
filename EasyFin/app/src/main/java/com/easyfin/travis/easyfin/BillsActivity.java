@@ -82,8 +82,9 @@ public class BillsActivity extends Fragment {
         for(int i = 0; i<preferenceHandler.getInstance().getBillNumber(getActivity().getApplicationContext());i++)
         {
             TextView view=new TextView(getActivity());
-            view.setText(itr.next()+"     "+itr.next()+"     "+itr.next());
+            view.setText(itr.next()+"      "+itr.next()+"       $"+itr.next());
             view.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+            lstViews.add(view);
         }
         for(TextView billView:lstViews)
         {

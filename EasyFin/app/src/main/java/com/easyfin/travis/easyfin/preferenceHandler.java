@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -89,12 +90,13 @@ public class preferenceHandler {
         return lstCoins;
     }
     //billsActivity functions
-    public void addBillData(String name, String date, int amount, Context context)
+    public void addBillData(String name, String date, double amount, Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
+        DecimalFormat df = new DecimalFormat("#.00");
         String data = prefs.getString("billData","");
-        data+="`"+name+"`"+date+"`"+String.valueOf(amount);
+        data+="`"+name+"`"+date+"`"+String.valueOf(df.format(amount));
         editor.putString("billData",data);
         editor.commit();
     }
@@ -105,8 +107,11 @@ public class preferenceHandler {
         String[] data = prefs.getString("billData","").split("`");
         for (String value:data)
         {
-            billData.add(value);
+            if(value != String.valueOf(""))
+                billData.add(value);
         }
+        if (!billData.isEmpty())
+            billData.remove(0);
         return billData;
     }
     public int getBillNumber(Context context)
