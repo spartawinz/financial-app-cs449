@@ -1,9 +1,11 @@
 package com.easyfin.travis.easyfin;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.Iterator;
@@ -74,21 +78,30 @@ public class BillsActivity extends Fragment {
     }
     private void refreshViews()
     {
-        List<TextView> lstViews = new LinkedList<>();
         List<String> billData = preferenceHandler.getInstance().getBillData(getActivity().getApplicationContext());
         Iterator<String> itr = billData.iterator();
-        LinearLayout layout = (LinearLayout) getView().findViewById(R.id.bills_linear);
+        TableLayout layout = (TableLayout) getView().findViewById(R.id.tableLayoutBills);
         layout.removeAllViews();
-        for(int i = 0; i<preferenceHandler.getInstance().getBillNumber(getActivity().getApplicationContext());i++)
+        for(int i = 0; i < preferenceHandler.getInstance().getBillNumber(getActivity().getApplicationContext());i++)
         {
-            TextView view=new TextView(getActivity());
-            view.setText(itr.next()+"      "+itr.next()+"       $"+itr.next());
-            view.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
-            lstViews.add(view);
-        }
-        for(TextView billView:lstViews)
-        {
-            layout.addView(billView);
+            TableRow row = new TableRow(getView().getContext());
+            TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,TableLayout.LayoutParams.WRAP_CONTENT,10.f);
+            row.setLayoutParams(tableRowParams);
+            String name = itr.next();
+            String date = itr.next();
+            String amount = itr.next();
+            TextView view = new TextView(getView().getContext());
+            view.setText(name);
+            view.setGravity(Gravity.START);
+            row.addView(view);
+            view = new TextView(getView().getContext());
+            view.setText(date);
+            row.addView(view);
+            view = new TextView(getView().getContext());
+            view.setText(amount);
+            view.setGravity(Gravity.END);
+            row.addView(view);
+            layout.addView(row);
         }
     }
 }

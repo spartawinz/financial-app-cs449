@@ -48,14 +48,15 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_below="@+id/bills_name_label"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:isScrollContainer="true">
 
-        <LinearLayout
-            android:id="@+id/bills_linear"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:orientation="vertical">
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:id = "@+id/tableLayoutBills"
+            android:stretchColumns="*">
+        </TableLayout>
     </ScrollView>
     <Button
         android:id="@+id/bills_refresh_button"

@@ -34,11 +34,11 @@ public class add_bill_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!billName.getText().toString().equals("")&&!billDate.getText().toString().equals("")&& !billAmount.getText().toString().equals("") && !billName.getText().toString().contains("`")&&!billDate.getText().toString().contains("`")) {
-                    if(billName.getText().toString().length() > 20)
+                    if(billName.getText().toString().length() > 14)
                     {
                         AlertDialog.Builder builder = new AlertDialog.Builder(add_bill_activity.this,R.style.dialogTheme);
                         builder.setTitle("ERROR")
-                                .setMessage("Please make the name 20 Characters max.")
+                                .setMessage("Please make the name 14 Characters max.")
                                 .setPositiveButton(android.R.string.ok,(new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
