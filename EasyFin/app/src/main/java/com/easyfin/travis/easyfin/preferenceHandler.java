@@ -120,4 +120,25 @@ public class preferenceHandler {
         String[] billData = prefs.getString("billData","").split("`");
         return billData.length/3;
     }
+    public void setBillsDue(Context context,List<String> billsDue)
+    {
+        String billsDueString = "";
+        for(int i = 0; i < billsDue.size(); i++)
+        {
+            if(i != billsDue.size()-1)
+                billsDueString += billsDue.get(i)+",";
+            else
+                billsDueString += billsDue.get(i);
+        }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("billsDue",billsDueString);
+        editor.commit();
+    }
+    public String getBillsDue(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String billsDueString = prefs.getString("billsDue","");
+        return billsDueString;
+    }
 }

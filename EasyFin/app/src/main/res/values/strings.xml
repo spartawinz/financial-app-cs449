@@ -26,4 +26,6 @@
     <string name="bills_name_label_text">NAME</string>
     <string name="bills_date_label_text">DATE</string>
     <string name="bills_label_amount_text">AMOUNT</string>
+    <string name="channel_name">EasyFinNotify</string>
+    <string name="channel_description">notifies user of bills</string>
 </resources>

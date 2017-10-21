@@ -2,6 +2,7 @@ package com.easyfin.travis.easyfin;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.nfc.FormatException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -22,11 +23,16 @@ import android.widget.TextView;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class BillsActivity extends Fragment {
-    public static BillsActivity newInstance() {
-        BillsActivity fragment = new BillsActivity();
-        return fragment;
+    private static BillsActivity activity;
+    public static BillsActivity getInstance() {
+        if (activity == null)
+        {
+            activity = new BillsActivity();
+        }
+        return activity;
     }
 
     @Override
@@ -81,15 +87,19 @@ public class BillsActivity extends Fragment {
         List<String> billData = preferenceHandler.getInstance().getBillData(getActivity().getApplicationContext());
         Iterator<String> itr = billData.iterator();
         TableLayout layout = (TableLayout) getView().findViewById(R.id.tableLayoutBills);
+        //clears table before input
         layout.removeAllViews();
         for(int i = 0; i < preferenceHandler.getInstance().getBillNumber(getActivity().getApplicationContext());i++)
         {
+            //sets up the layout so that it wraps_content instead of match_parent
             TableRow row = new TableRow(getView().getContext());
             TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,TableLayout.LayoutParams.WRAP_CONTENT,10.f);
             row.setLayoutParams(tableRowParams);
+            // grabs the individual pieces of the data
             String name = itr.next();
             String date = itr.next();
             String amount = itr.next();
+            // adds rows to display the data in the desired format
             TextView view = new TextView(getView().getContext());
             view.setText(name);
             view.setGravity(Gravity.START);
@@ -102,6 +112,35 @@ public class BillsActivity extends Fragment {
             view.setGravity(Gravity.END);
             row.addView(view);
             layout.addView(row);
+        }
+    }
+    public boolean checkBillDue()
+    {
+        List<String> bills = preferenceHandler.getInstance().getBillData(getActivity().getApplicationContext());
+        Iterator<String> itr = bills.iterator();
+        List<String> names = new LinkedList<>();
+        try
+        {
+            while (itr.hasNext())
+            {
+                names.add(itr.next());
+                itr.next();
+                itr.next();
+            }
+        }
+        catch(Exception e)
+        {
+            names.clear();
+            System.out.println("Invalid data input.");
+        }
+        if (!names.isEmpty())
+        {
+            preferenceHandler.getInstance().setBillsDue(getActivity().getApplicationContext(),names);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
