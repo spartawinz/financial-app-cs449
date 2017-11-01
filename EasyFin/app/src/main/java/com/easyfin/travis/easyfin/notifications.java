@@ -7,24 +7,39 @@ import android.support.v7.app.NotificationCompat;
 
 import java.util.List;
 
+
 public class notifications extends AppCompatActivity {
     private NotificationCompat.Builder builder;
     private NotificationManager manager;
-    private int id = 001;
+    private Context context;
     notifications(Context context)
     {
+        this.context = context;
         builder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("Bill Due!");
 
-        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void sendNotification(String name)
+    // builds the notification so that each is personalized with the bill name.
+    public void sendNotification()
     {
-        builder.setContentText(name + "is due!");
+        int id = 001;
+        List<String> billsDue = preferenceHandler.getInstance().getBillsDue(context);
+        try {
+            for (int i = 0; i < billsDue.size(); i++) {
+                builder.setContentText(billsDue.get(i) + " is due!");
 
-        manager.notify(id,builder.build());
+                manager.notify(id, builder.build());
+                id = id + 1;
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("builder is null or manager is null");
+        }
+
     }
 
 }

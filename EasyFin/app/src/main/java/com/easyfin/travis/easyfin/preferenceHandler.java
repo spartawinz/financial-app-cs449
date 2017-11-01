@@ -5,13 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Travis on 9/30/2017.
- */
+
 
 public class preferenceHandler {
     // The purpose of this class is to allow for the storage of data using a single sharedpreferences across activities
@@ -100,6 +97,7 @@ public class preferenceHandler {
         editor.putString("billData",data);
         editor.commit();
     }
+    // gets the bills as a linked list including the name, date, and amount
     public List<String> getBillData(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -111,15 +109,18 @@ public class preferenceHandler {
                 billData.add(value);
         }
         if (!billData.isEmpty())
+            // needed because it puts a blank in front for some reason
             billData.remove(0);
         return billData;
     }
+    // returns amount of records of bills
     public int getBillNumber(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String[] billData = prefs.getString("billData","").split("`");
         return billData.length/3;
     }
+    // sets the bills due taking in a linked list of strings
     public void setBillsDue(Context context,List<String> billsDue)
     {
         String billsDueString = "";
@@ -135,10 +136,16 @@ public class preferenceHandler {
         editor.putString("billsDue",billsDueString);
         editor.commit();
     }
-    public String getBillsDue(Context context)
+    // returns the bills due in a linked list
+    public List<String> getBillsDue(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String billsDueString = prefs.getString("billsDue","");
-        return billsDueString;
+        String[] billsDueString = prefs.getString("billsDue","").split(",");
+        List<String> billsDue = new LinkedList<>();
+        for(String bill:billsDueString)
+        {
+            billsDue.add(bill);
+        }
+        return billsDue;
     }
 }
