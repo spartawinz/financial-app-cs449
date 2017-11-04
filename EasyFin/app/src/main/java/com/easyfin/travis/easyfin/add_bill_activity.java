@@ -8,10 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 public class add_bill_activity extends AppCompatActivity {
 
     @Override
@@ -50,8 +46,10 @@ public class add_bill_activity extends AppCompatActivity {
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
                     }
+                    //adds bill to sharedPreferences and adds the alarm to be triggered at desired time
                     else {
                         addNewBill(billName.getText().toString(), billDate.getText().toString(), Double.parseDouble(billAmount.getText().toString()));
+                        addNotificationTimer(billName.getText().toString(),billDate.getText().toString());
                         finish();
                     }
                 }
@@ -80,5 +78,11 @@ public class add_bill_activity extends AppCompatActivity {
     private void addNewBill(String name, String date,double amount)
     {
         preferenceHandler.getInstance().addBillData(name,date,amount,getApplicationContext());
+    }
+    //creates a timer for the notification even when the app is off
+    private void addNotificationTimer(String name, String date)
+    {
+        NotificationBuild notification = new NotificationBuild(BillsActivity.getInstance().getActivity().getApplicationContext());
+        notification.sendNotification(name,date);
     }
 }

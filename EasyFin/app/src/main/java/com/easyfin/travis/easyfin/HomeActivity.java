@@ -32,12 +32,6 @@ public class HomeActivity extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         context = getActivity().getApplicationContext();
-        // Each part needs to pass the context of the application otherwise if we call it within the function it throws a null pointer exception
-        // Checks to see if there is any bill that needs to be alerted at startup
-        if(BillsActivity.getInstance().checkBillDue(context))
-        {
-            notifications billNotify = new notifications(context);
-            billNotify.sendNotification();
-        }
+
     }
 }
