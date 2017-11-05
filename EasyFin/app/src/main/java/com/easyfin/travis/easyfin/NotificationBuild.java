@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.NotificationCompat;
 
 import java.text.SimpleDateFormat;
@@ -36,28 +37,36 @@ public class NotificationBuild {
         int id = preferenceHandler.getInstance().getBillNumber(context);
         long timeTill = getTimeTill(date);
         //long timeTill = testTimeTill();
-        Intent intent = new Intent(context, Base.class);
-        PendingIntent activity = PendingIntent.getActivity(context,id,intent,PendingIntent.FLAG_CANCEL_CURRENT);
-        List<String> billsDue = preferenceHandler.getInstance().getBillsDue(context);
+        //long timeTill = testFiveSeconds();
+
+
         try {
-            builder.setContentIntent(activity);
+            Intent intent = new Intent(context, context.getApplicationContext().getClass());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+            builder.setContentIntent(pendingIntent);
             builder.setContentText(name + " is due!");
             Notification notification = builder.build();
-            if(timeTill >= 0)
+            if(timeTill < 0)
             {
                 System.out.println("timeTill is negative.");
                 throw new Exception("timeTill is negative");
             }
+
+            intent.putExtra(NotificationBroadcast.NOTIFICATION_ID,id);
+            intent.putExtra(NotificationBroadcast.NOTIFICATION,notification);
+
             //NManager.notify(id,builder.build());
             // creates an intent for the broadcast
             Intent nIntent = new Intent(context,NotificationBroadcast.class);
             nIntent.putExtra(NotificationBroadcast.NOTIFICATION_ID,id);
             nIntent.putExtra(NotificationBroadcast.NOTIFICATION,notification);
 
-            PendingIntent pIntent = PendingIntent.getBroadcast(context,id,nIntent,PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pIntent = PendingIntent.getBroadcast(context,id,nIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
+            timeTill += SystemClock.elapsedRealtime();
             AlarmManager AManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            AManager.set(AlarmManager.ELAPSED_REALTIME,timeTill,pIntent);
+            AManager.setExact(AlarmManager.ELAPSED_REALTIME,timeTill,pIntent);
         }
         catch(Exception e)
         {
@@ -98,6 +107,10 @@ public class NotificationBuild {
     private long testTimeTill()
     {
         return 0L;
+    }
+
+    private long testFiveSeconds() {
+        return 5000L;
     }
 
 }
