@@ -58,11 +58,35 @@
             android:stretchColumns="*">
         </TableLayout>
     </ScrollView>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id = "@+id/bills_search_field"
+        android:inputType="text"
+        android:hint="bill name or date"
+        android:layout_below="@id/bills_scroll_view"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@+id/bills_search_button"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"/>
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:id="@+id/bills_search_button"
+        android:layout_alignParentRight="true"
+        android:text="@string/search_button"
+        android:layout_marginRight="25dp"
+        android:layout_below="@id/bills_scroll_view"
+        android:layout_marginBottom="10dp"
+        android:layout_alignStart="@+id/bills_amount_label"
+        android:textColor="@color/colorWindowBackground"/>
     <Button
         android:id="@+id/bills_refresh_button"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_below="@id/bills_scroll_view"
+        android:layout_below="@id/bills_search_field"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="25dp"
         android:text="@string/refresh_bills_button"
@@ -71,7 +95,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_below="@id/bills_scroll_view"
+        android:layout_below="@id/bills_search_field"
         android:layout_alignParentRight="true"
         android:layout_marginRight="25dp"
         android:text="@string/delete_bill_button"
