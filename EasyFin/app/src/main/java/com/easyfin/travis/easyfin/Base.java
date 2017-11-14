@@ -25,13 +25,13 @@ public class Base extends AppCompatActivity {
                         Fragment selectedFragment;
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
-                                selectedFragment = HomeActivity.newInstance();
+                                selectedFragment = HomeActivity.getInstance();
                                 break;
                             case R.id.navigation_bills:
                                 selectedFragment = BillsActivity.getInstance();
                                 break;
                             case R.id.navigation_stocks:
-                                selectedFragment = StocksActivity.newInstance();
+                                selectedFragment = StocksActivity.getInstance();
                                 break;
                             default:
                                 new Exception("Invalid Button.");
@@ -45,7 +45,7 @@ public class Base extends AppCompatActivity {
                 });
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_container, HomeActivity.newInstance());
+        transaction.replace(R.id.main_container, HomeActivity.getInstance());
         transaction.commit();
 
     }

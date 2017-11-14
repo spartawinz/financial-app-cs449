@@ -28,4 +28,6 @@
     <string name="bills_label_amount_text">AMOUNT</string>
     <string name="channel_name">EasyFinNotify</string>
     <string name="channel_description">notifies user of bills</string>
+    <string name="monthly_earnings">monthly earnings</string>
+    <string name="switch_textView">Pie Chart/Line Graph</string>
 </resources>

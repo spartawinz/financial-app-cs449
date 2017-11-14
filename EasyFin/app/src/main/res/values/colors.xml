@@ -6,4 +6,6 @@
     <color name="colorBackground">#161414</color>
     <color name="colorWindowBackground">#484444</color>
     <color name="white">#FFFFFF</color>
+    <color name="RedPie">#af0906</color>
+    <color name="BluePie">#4755d1</color>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homeActivity"
     android:layout_width="match_parent"
@@ -8,19 +7,74 @@
     android:orientation="vertical"
     tools:context="com.easyfin.travis.easyfin.HomeActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50sp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/home_textview_title"
+        android:text="WELCOME TO EASYFIN"
+        android:layout_marginTop="10sp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        />
 
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200sp"
+        android:id="@+id/line_graph"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/home_textview_title"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginTop="15sp" />
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_width="match_parent"
+        android:layout_height="200sp"
+        android:id="@+id/pie_graph"
+        android:layout_below="@id/home_textview_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="15sp"
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="15sp" />
+    <Switch
+        android:id="@+id/graph_switch"
+        android:layout_width="50sp"
+        android:layout_height="25sp"
+        android:layout_below="@id/pie_graph"
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="25sp"
+        android:layout_toRightOf="@id/graph_switch"
+        android:layout_below="@id/pie_graph"
+        android:layout_marginRight="15sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:text="@string/switch_textView"
+        android:textColor="@color/white"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50sp"
+        android:id="@+id/earning_amount_edit_text"
+        android:layout_below="@id/graph_switch"
+        android:layout_alignStart="@id/line_graph"
+        android:layout_toLeftOf="@+id/submit_monthly_earnings_button"
+        android:hint="@string/monthly_earnings"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="numberDecimal"/>
+    <Button
+        android:layout_width="100sp"
+        android:layout_height="50sp"
+        android:id="@+id/submit_monthly_earnings_button"
+        android:layout_below="@id/graph_switch"
+        android:text="@string/submitBttn"
+        android:layout_alignEnd="@id/pie_graph"
+        android:textColor="@color/colorWindowBackground" />
 
-        <TextView
-            android:id="@+id/homeMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/title_home" />
-
-
-
-
-</LinearLayout>
+</RelativeLayout>

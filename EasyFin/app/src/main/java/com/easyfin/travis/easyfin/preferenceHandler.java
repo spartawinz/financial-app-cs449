@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,32 +122,47 @@ public class preferenceHandler {
         String[] billData = prefs.getString("billData","").split("`");
         return billData.length/3;
     }
-    // sets the bills due taking in a linked list of strings
-    public void setBillsDue(Context context,List<String> billsDue)
+    //inserts new monthly earnings into storage
+    public void addMonthlyEarning(Context context, String amount)
     {
-        String billsDueString = "";
-        for(int i = 0; i < billsDue.size(); i++)
-        {
-            if(i != billsDue.size()-1)
-                billsDueString += billsDue.get(i)+",";
-            else
-                billsDueString += billsDue.get(i);
-        }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("billsDue",billsDueString);
+        editor.putString("monthlyEarning",amount);
         editor.commit();
     }
-    // returns the bills due in a linked list
-    public List<String> getBillsDue(Context context)
+    //gets monthly earnings from the database
+    public double getMonthlyEarning(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String[] billsDueString = prefs.getString("billsDue","").split(",");
-        List<String> billsDue = new LinkedList<>();
-        for(String bill:billsDueString)
-        {
-            billsDue.add(bill);
+        String amount = prefs.getString("monthlyEarning","");
+        try {
+            return Double.parseDouble(amount);
         }
-        return billsDue;
+        catch(Exception e)
+        {
+            System.out.println("value is either empty or wont parse as double.");
+            return 0.0;
+        }
+    }
+    //gets bills that are for this year
+    public List<double[]> getBillsThisYear(Context context)
+    {
+        List<double[]> billsThisYear = new LinkedList<>();
+        List<String> bills = getBillData(context);
+        Iterator<String> itr = bills.iterator();
+        while(itr.hasNext())
+        {
+            itr.next();
+            String[] billDate = itr.next().split("/");
+            if(billDate[2].equals(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)))){
+                double[] tmp = {Double.parseDouble(billDate[0]),Double.parseDouble(itr.next())};
+                billsThisYear.add(tmp);
+            }
+            else
+            {
+                itr.next();
+            }
+        }
+        return billsThisYear;
     }
 }

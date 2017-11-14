@@ -32,6 +32,16 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class StocksActivity extends Fragment {
+    private static StocksActivity activity;
+    // instantiates the fragment
+    public static StocksActivity getInstance() {
+        if(activity == null)
+        {
+            activity = new StocksActivity();
+        }
+        return activity;
+    }
+
     // just instantiates the instance of preferenceHandler if it hasn't already been made.
     public preferenceHandler handler = preferenceHandler.getInstance();
     // converts the names of the inputted to link addresses that are readable by the URLconnection.
@@ -56,11 +66,7 @@ public class StocksActivity extends Fragment {
         preferenceHandler.getInstance().addCoinIds(getActivity().getApplicationContext(),temp);
         return temp;
     }
-    // instantiates the fragment
-    public static StocksActivity newInstance() {
-        StocksActivity fragment = new StocksActivity();
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
