@@ -32,6 +32,7 @@ public class HomeActivity extends Fragment {
         {
             activity = new HomeActivity();
         }
+
         return activity;
     }
 
@@ -93,6 +94,19 @@ public class HomeActivity extends Fragment {
             populatePieGraph(piegraph,earnings);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            checkSwitchState();
+        }
+        catch(Exception e)
+        {
+            System.out.println("switch is not initialized.");
+        }
+    }
+
     // checks to make sure the string input can be parsed to double
     private boolean checkDouble(String input)
     {
