@@ -25,6 +25,7 @@ public class preferenceHandler {
             instance = new preferenceHandler();
         return instance;
     }
+    //adds favorite coin
     public void addFavorite(Context context, String id, String name)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -38,6 +39,7 @@ public class preferenceHandler {
         editor.putString("favorite_name",temp);
         editor.commit();
     }
+    // gets favorites ids saved by the user
     public List<String> getFavoritesId(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -50,6 +52,7 @@ public class preferenceHandler {
         }
         return lstFavorites;
     }
+    //gets favorites names saved by user
     public List<String> getFavoritesName(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -62,6 +65,7 @@ public class preferenceHandler {
         }
         return lstFavorites;
     }
+    //pushes coin ids to shared preferences for later use
     public void addCoinIds(Context context, List<String> names)
     {
         String strNames = "";
@@ -76,6 +80,7 @@ public class preferenceHandler {
         editor.putString("coinIDs",strNames);
         editor.commit();
     }
+    // grabs the coinids from the previous function
     public List<String> getCoinIds(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -152,6 +157,27 @@ public class preferenceHandler {
         String[] billData = prefs.getString("billData","").split("`");
         return billData.length/3;
     }
+    //gets bills that are for this year
+    public List<double[]> getBillsThisYear(Context context)
+    {
+        List<double[]> billsThisYear = new LinkedList<>();
+        List<String> bills = getBillData(context);
+        Iterator<String> itr = bills.iterator();
+        while(itr.hasNext())
+        {
+            itr.next();
+            String[] billDate = itr.next().split("/");
+            if(billDate[2].equals(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)))){
+                double[] tmp = {Double.parseDouble(billDate[0]),Double.parseDouble(itr.next())};
+                billsThisYear.add(tmp);
+            }
+            else
+            {
+                itr.next();
+            }
+        }
+        return billsThisYear;
+    }
     //inserts new monthly earnings into storage
     public void addMonthlyEarning(Context context, String amount)
     {
@@ -174,27 +200,5 @@ public class preferenceHandler {
             return 0.0;
         }
     }
-    //gets bills that are for this year
-    public List<double[]> getBillsThisYear(Context context)
-    {
-        List<double[]> billsThisYear = new LinkedList<>();
-        List<String> bills = getBillData(context);
-        Iterator<String> itr = bills.iterator();
-        while(itr.hasNext())
-        {
-            itr.next();
-            String[] billDate = itr.next().split("/");
-            if(billDate[2].equals(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)))){
-                double[] tmp = {Double.parseDouble(billDate[0]),Double.parseDouble(itr.next())};
-                billsThisYear.add(tmp);
-            }
-            else
-            {
-                itr.next();
-            }
-        }
-        return billsThisYear;
-    }
-
 
 }
