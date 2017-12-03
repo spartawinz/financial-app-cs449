@@ -100,15 +100,16 @@ public class preferenceHandler {
         editor.commit();
     }
     // remove selected bill data
-    public void removeSelectedBillData(Context context,String target)
+    public void removeSelectedBillData(Context context,int target)
     {
         List<String> bills = getBillData(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("billData","");
         editor.commit();
+        int count = 0;
         for(int i = 0; i < bills.size(); i++) {
-            if (!bills.get(i).equals(target)) {
+            if (count == target) {
                 String name;
                 String date;
                 double amount;
@@ -118,10 +119,12 @@ public class preferenceHandler {
                 i++;
                 amount=Double.parseDouble(bills.get(i));
                 addBillData(name,date,amount,context);
+                count++;
             }
             else
             {
                 i+=2;
+                count++;
             }
         }
 

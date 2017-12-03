@@ -201,13 +201,19 @@ public class BillsActivity extends Fragment {
             System.out.println("tableLayoutTable is null or doesn't exist.");
         }
     }
-
+    //deletes rows that user selected
     private void deleteSelectedViews()
     {
+        TableLayout layout = (TableLayout) getView().findViewById(R.id.tableLayoutBills);
         for(TableRow rowdata:rows)
         {
-            TextView view = (TextView) rowdata.getChildAt(0);
-            preferenceHandler.getInstance().removeSelectedBillData(AContext,view.getText().toString());
+            for(int i = 0; i < layout.getChildCount(); i++)
+            {
+                if(layout.getChildAt(i).equals(rowdata))
+                {
+                    preferenceHandler.getInstance().removeSelectedBillData(AContext,i);
+                }
+            }
         }
         rows.clear();
         refreshViews();
