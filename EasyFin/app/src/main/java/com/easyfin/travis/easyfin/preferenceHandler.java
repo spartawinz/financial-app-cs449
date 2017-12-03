@@ -99,6 +99,33 @@ public class preferenceHandler {
         editor.putString("billData",data);
         editor.commit();
     }
+    // remove selected bill data
+    public void removeSelectedBillData(Context context,String target)
+    {
+        List<String> bills = getBillData(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("billData","");
+        editor.commit();
+        for(int i = 0; i < bills.size(); i++) {
+            if (!bills.get(i).equals(target)) {
+                String name;
+                String date;
+                double amount;
+                name=bills.get(i);
+                i++;
+                date=bills.get(i);
+                i++;
+                amount=Double.parseDouble(bills.get(i));
+                addBillData(name,date,amount,context);
+            }
+            else
+            {
+                i+=2;
+            }
+        }
+
+    }
     // gets the bills as a linked list including the name, date, and amount
     public List<String> getBillData(Context context)
     {
@@ -165,4 +192,6 @@ public class preferenceHandler {
         }
         return billsThisYear;
     }
+
+
 }

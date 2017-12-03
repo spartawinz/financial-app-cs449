@@ -17,9 +17,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +31,7 @@ public class BillsActivity extends Fragment {
         }
         return activity;
     }
+    private List<TableRow> rows = new LinkedList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,12 +85,26 @@ public class BillsActivity extends Fragment {
                     searchBillName(searchText.getText().toString());
                 }
             });
+            final Button deleteButton = (Button) getView().findViewById(R.id.bills_delete_button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteSelectedViews();
+                }
+            });
         }
         catch(Exception e)
         {
             System.out.println("bills_refresh_button doesn't exist or is null.");
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshViews();
+    }
+
     private void showPopup()
     {
         startActivity(new Intent(getActivity(),add_bill_activity.class));
@@ -101,13 +113,14 @@ public class BillsActivity extends Fragment {
     {
         List<String> billData = preferenceHandler.getInstance().getBillData(AContext);
         Iterator<String> itr = billData.iterator();
+        rows.clear();
         try {
             TableLayout layout = (TableLayout) getView().findViewById(R.id.tableLayoutBills);
             //clears table before input
             layout.removeAllViews();
             for (int i = 0; i < preferenceHandler.getInstance().getBillNumber(AContext); i++) {
                 //sets up the layout so that it wraps_content instead of match_parent
-                TableRow row = new TableRow(getView().getContext());
+                final TableRow row = new TableRow(getView().getContext());
                 TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 10.f);
                 row.setLayoutParams(tableRowParams);
                 // grabs the individual pieces of the data
@@ -126,6 +139,21 @@ public class BillsActivity extends Fragment {
                 view.setText(amount);
                 view.setGravity(Gravity.END);
                 row.addView(view);
+                row.setBackgroundColor(getResources().getColor(R.color.colorWindowBackground));
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(rows.contains(row)) {
+                            rows.remove(row);
+                            row.setBackgroundColor(getResources().getColor(R.color.colorWindowBackground));
+                        }
+                        else
+                        {
+                            row.setBackgroundColor(getResources().getColor(R.color.highlight_tint));
+                            rows.add(row);
+                        }
+                    }
+                });
                 layout.addView(row);
             }
         }
@@ -172,5 +200,16 @@ public class BillsActivity extends Fragment {
         {
             System.out.println("tableLayoutTable is null or doesn't exist.");
         }
+    }
+
+    private void deleteSelectedViews()
+    {
+        for(TableRow rowdata:rows)
+        {
+            TextView view = (TextView) rowdata.getChildAt(0);
+            preferenceHandler.getInstance().removeSelectedBillData(AContext,view.getText().toString());
+        }
+        rows.clear();
+        refreshViews();
     }
 }
