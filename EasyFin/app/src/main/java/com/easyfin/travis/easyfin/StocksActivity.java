@@ -176,23 +176,24 @@ public class StocksActivity extends Fragment {
     {
         @Override
         protected List<String> doInBackground(List<String>...lst) {
-            List<String> txts = new LinkedList<>();
-            List<String> strings = lst[0];
-            for(int i = 0; i < strings.size(); i++)
-            {
-                List<String> tmp = processURL(strings.get(i));
-                for(int j = 0; j < tmp.size(); j++)
-                {
-                    txts.add(tmp.get(j));
+            try {
+                List<String> txts = new LinkedList<>();
+                List<String> strings = lst[0];
+                for (int i = 0; i < strings.size(); i++) {
+                    List<String> tmp = processURL(strings.get(i));
+                    for (int j = 0; j < tmp.size(); j++) {
+                        txts.add(tmp.get(j));
+                    }
+                }
+                if (!txts.isEmpty()) {
+                    return txts;
+                } else {
+                    return new LinkedList<String>();
                 }
             }
-            if (!txts.isEmpty())
-            {
-                return txts;
-            }
-            else
-            {
-                return new LinkedList<String>();
+            catch(Exception e) {
+                System.out.println(e.getStackTrace());
+                return new LinkedList<>();
             }
 
         }
@@ -200,24 +201,35 @@ public class StocksActivity extends Fragment {
         @Override
         protected void onPostExecute(List<String> txts)
         {
-            Iterator<String> itr = txts.listIterator();
-            int count = 1;
-            Resources r = getView().getResources();
-            String id_name;
-            List<String> nameSet = preferenceHandler.getInstance().getCoinIds(getActivity().getApplicationContext());
-            Iterator<String> names = nameSet.iterator();
-            while(itr.hasNext() && count <=5)
+            try {
+                if(!txts.isEmpty()) {
+                    Iterator<String> itr = txts.listIterator();
+                    int count = 1;
+                    Resources r = getView().getResources();
+                    String id_name;
+                    List<String> nameSet = preferenceHandler.getInstance().getCoinIds(getActivity().getApplicationContext());
+                    Iterator<String> names = nameSet.iterator();
+                    while (itr.hasNext() && count <= 5) {
+                        id_name = "tablename" + String.valueOf(count);
+                        TextView view = (TextView) getView().findViewById(r.getIdentifier(id_name, "id", getActivity().getPackageName()));
+                        view.setText(names.next());
+                        id_name = "tableusd" + String.valueOf(count);
+                        view = (TextView) getView().findViewById(r.getIdentifier(id_name, "id", getActivity().getPackageName()));
+                        view.setText(itr.next());
+                        id_name = "tablebtc" + String.valueOf(count);
+                        view = (TextView) getView().findViewById(r.getIdentifier(id_name, "id", getActivity().getPackageName()));
+                        view.setText(itr.next());
+                        count++;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            catch(Exception e)
             {
-                id_name = "tablename"+String.valueOf(count);
-                TextView view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
-                view.setText(names.next());
-                id_name ="tableusd"+String.valueOf(count);
-                view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
-                view.setText(itr.next());
-                id_name ="tablebtc"+String.valueOf(count);
-                view = (TextView) getView().findViewById(r.getIdentifier(id_name,"id",getActivity().getPackageName()));
-                view.setText(itr.next());
-                count++;
+                System.out.println(e.getStackTrace());
             }
         }
 
@@ -277,9 +289,9 @@ public class StocksActivity extends Fragment {
             }
         }
         catch (Exception e) {
-            return new LinkedList<String>();
+            return new LinkedList<>();
         }
-        return new LinkedList<String>();
+        return new LinkedList<>();
     }
     private List<String> processText(StringBuffer buffer)
     {
